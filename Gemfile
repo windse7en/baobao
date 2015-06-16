@@ -26,6 +26,7 @@ gem 'turbolinks'
 
 gem 'passenger'
 gem 'bootstrap-sass', '3.3.0.0'
+gem 'bootstrap-material-design'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
