@@ -1,0 +1,129 @@
+<div class="header-panel shadow-z-2" style="background-color:#009587;height:144px; position: relative; z-index:3;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-3">
+        <h1 style="color:#FFF; font-size:20px; font-weight: 400;padding-left:35px; padding-top:55px">Post Calculation</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid main">
+  <div class="row">
+    <nav class="col-xs-3 menu">
+    </nav>
+    <div class="pages col-xs-5" style="z-index:4;margin-top:-40px;">
+      <div ng-controller="calculatePost" class="well page">
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">重量：</label>
+          </div>
+          <div class="col-xs-5">
+            <input class="form-control" placeholder="单位是磅" ng-model="theWeight" style="text-align:right;"></input>
+          </div>
+          <div class="col-xs-2" style="margin-top:10px;">
+            lb.
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">买入价：</label>
+          </div>
+          <div class="col-xs-5">
+            <input class="form-control" ng-model="thePrice" ng-init="" placeholder="买入价格" style="text-align:right;"></input>
+          </div>
+          <div class="col-xs-2" style="margin-top:10px;">
+            美金
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">类别：</label>
+          </div>
+          <div class="col-xs-5">
+            <select id="category" class="form-control">
+              <option value=1>鞋子</option>
+              <option value=2>包</option>
+              <option value=3>衣服</option>
+              <option value=4>保健品</option>
+              <option value=5>眼镜</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">快递公司:</label>
+          </div>
+          <div class="col-xs-5">
+            <select id="category" class="form-control">
+              <option>AAE</option>
+              <option>瑞天快递</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">邮费：</label>
+          </div>
+          <div class="col-xs-7">
+            <h1>$ {{cal_post()}}<h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">被税：</label>
+          </div>
+          <div class="col-xs-7">
+            <h1>$ {{cal_tax()}}<h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <label class="form-control" style="text-align:right;">成本：</label>
+          </div>
+          <div class="col-xs-7">
+            <h1>$ {{cal_sum()}}<h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var post_data={
+  "AAE":{
+      base:11, 
+      per_pound:3.95
+  }
+};
+// 空，鞋子，包，衣服，保健品，眼镜
+var tax_goods=[0, 0.1, 0.1, 0.1, 0.1, 0.1]
+
+function cal_AAE(weight_s){
+  var weight = Math.ceil(weight_s);
+  weight = isNaN(weight)? 1:weight;
+  if(weight<=1) return post_data["AAE"].base;
+  var overweight = post_data["AAE"].per_pound * (weight-1) + post_data["AAE"].base;
+  return overweight;
+}
+function cal_tax_import(price) {
+  price = isNaN(price)? 0: price;
+  price = parseFloat(price);
+  return (price*tax_goods[1]).toFixed(2);
+}
+
+var app = angular.module("myApp", []);
+app.controller('calculatePost', function($scope){
+  $scope.cal_post = function() {
+    return cal_AAE($scope.theWeight);
+  };
+  $scope.cal_tax = function() {
+    return cal_tax_import($scope.thePrice);
+  }
+  $scope.cal_sum = function() {
+    var price = $scope.thePrice;
+    price = isNaN(price)? 0: parseFloat(price);
+    return (price + $scope.cal_post() + parseFloat($scope.cal_tax())).toFixed(2);
+  }
+});
+</script>
