@@ -109,7 +109,7 @@ function cal_AAE(weight_s){
 function cal_tax_import(price) {
   price = isNaN(price)? 0: price;
   price = parseFloat(price);
-  return (price*tax_goods[1]).toFixed(2);
+  return (price*tax_goods[parseInt($('#category').val())]).toFixed(2);
 }
 
 var app = angular.module("myApp", []);
