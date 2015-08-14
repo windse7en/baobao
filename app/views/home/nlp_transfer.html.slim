@@ -1,0 +1,60 @@
+.header-panel.shadow-z-2 style="background-color:#009587;height:144px; position: relative; z-index:3;"
+  .container-fluid
+    .row
+      .col-xs-3
+        h1 style="color:#FFF; font-size:20px; font-weight: 400;padding-left:35px; padding-top:55px" 
+          | Text Travese
+
+.container-fluid.main
+  .row
+    nav class="col-xs-3 menu"
+    .pages.col-xs-5 style="z-index:4;margin-top:-40px;"
+      .well.page
+        .row style="text-align:center;"
+          textarea id="user_input" cols="40" rows='20'
+          button id="send_text" class="btn" style="vertical-align:top;margin-left:10px" onclick="send_texts(this)"
+            | Send
+        div id="finished_text" style="z-index:5; margin-left: 10px;"
+          - @postData.each do |e|
+            h2 line
+            - e.each do |e2|
+              .row
+                input placeholder="#{e2["word"]}"
+                label 
+                  | 词性： #{e2["flag"]}
+
+javascript:
+  var app = angular.module("myApp", []);
+
+  function update_div(data) {
+    $("#finished_text").empty();
+    data.forEach(function(entry) {
+      entry.forEach(function(item) {
+        $("#finished_text").append('<label>'+item.word+'&nbsp;&nbsp;</label>');
+        $("#finished_text").append('<label> 词性:'+item.flag+'&nbsp;&nbsp;</label>');
+      });
+    });
+  }
+
+  function send_texts(element) {
+    var texts = $(element).siblings('textarea').val()
+    console.log(texts);
+    send_ajax_request('/parse_texts', texts, update_div)
+  }
+
+coffee:
+  root = exports ? this
+  send_ajax_request = ($url, $data, $callback) ->
+      $.ajax({
+          url: $url,
+          type: 'POST',
+          dataType: 'json',
+          data: $data,
+          success: (data) -> 
+              console.log(data)
+              alert ("No results found") if data.length ==0
+              $callback(data) if $callback
+          error: () -> alert('Something wrong.')
+      })
+  root.send_ajax_request = send_ajax_request
+

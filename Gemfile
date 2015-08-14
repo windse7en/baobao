@@ -30,6 +30,13 @@ gem 'bootstrap-material-design'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
+gem 'slim'
+
+group :development do
+  gem 'pry'
+  gem 'byebug'
+  # parallel test can improve speed some slow tests"
+end
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

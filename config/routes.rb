@@ -1,6 +1,8 @@
 Baobao::Application.routes.draw do
   root 'home#index'
   get '/post_calculate' => 'home#post_calculate'
+  get '/nlp_transfer' => 'home#nlp_transfer'
+  post '/parse_texts' => 'home#parse_texts'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

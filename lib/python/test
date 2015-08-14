@@ -1,0 +1,5 @@
+#!/usr/bin/
+for i in {1..1};
+do
+curl -X POST --data "我爱北京天安门" -H "Accept: application/json" -H "Content-type: application/json" http://104.236.128.250:5000/;
+done
