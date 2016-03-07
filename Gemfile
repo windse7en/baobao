@@ -33,9 +33,13 @@ gem 'jbuilder', '~> 1.2'
 gem 'slim'
 
 group :development do
-  gem 'pry'
-  gem 'byebug'
+  gem 'pry-byebug'
+  gem 'rubocop', '~> 0.27.1', require: false
   # parallel test can improve speed some slow tests"
+end
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0'
 end
 
 group :doc do
