@@ -7,8 +7,8 @@
 
 .container-fluid.main
   .row
-    nav class="col-xs-3 menu"
-    .pages.col-xs-5 style="z-index:4;margin-top:-40px;"
+    nav class="col-xs-2 menu"
+    .pages.col-xs-7 style="z-index:4;margin-top:-40px;"
       .well.page
         .row style="text-align:center;"
           textarea id="user_input" cols="40" rows='20'
@@ -22,8 +22,24 @@
                 input placeholder="#{e2["word"]}"
                 label 
                   | 词性： #{e2["flag"]}
+          br
+        div id="vis_container" style="width:600px;height:400px;"
+
 
 javascript:
+
+  // you can extend the options like a normal JSON variable:
+  var DOTstring = 'dinetwork {1 -> 1 -> 2 [color=blue]; 2 -> 3 [label=f]; 2 -- 4; 2 -> 1 }';
+  var parsedData = vis.network.convertDot(DOTstring);
+  var nodesList = [{"label": 'a'},{"label": 'b'},{"label": 'c'},{"label": 'd'}];
+  function addLabelToData(nodes, list) {
+    nodes.forEach(function(entry, i) {
+      entry.label = list[i].label;
+    });
+    return true;
+  }
+  addLabelToData(parsedData.nodes, nodesList);
+
   var app = angular.module("myApp", []);
 
   function update_div(data) {
@@ -42,19 +58,4 @@ javascript:
     send_ajax_request('/parse_texts', texts, update_div)
   }
 
-coffee:
-  root = exports ? this
-  send_ajax_request = ($url, $data, $callback) ->
-      $.ajax({
-          url: $url,
-          type: 'POST',
-          dataType: 'json',
-          data: $data,
-          success: (data) -> 
-              console.log(data)
-              alert ("No results found") if data.length ==0
-              $callback(data) if $callback
-          error: () -> alert('Something wrong.')
-      })
-  root.send_ajax_request = send_ajax_request
-
+= javascript_include_tag 'vis_custom', 'ajax_send'
